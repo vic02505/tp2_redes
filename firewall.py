@@ -24,6 +24,6 @@ class Firewall(EventMixin):
         # TODO: if host == 1 and dstPort == 5001 and protocolo UDP: descartar
         return            
 
-    def launch():
-        # Starting the Firewall module
-        core.registerNew(Firewall)
+def launch():
+     # Starting the Firewall module
+     core.registerNew(Firewall)
