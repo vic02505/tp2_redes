@@ -27,20 +27,20 @@ class Firewall(EventMixin):
         # Si no ponemos ningun if, se instalarán las reglas en todos los switches
         if event.dpid == 2:                                 # Se conecta al primer switch nada mas
             log.info("Seteando reglas")
-            self.setRule_1(event)
-            self.setRule_2(event)
-            self.setRule_3(event, "10.0.0.1", "10.0.0.4")
+            self.set_rule_1(event)
+            self.set_rule_2(event)
+            self.set_rule_3(event, "10.0.0.1", "10.0.0.4")
         return            
 
     # 1. Se deben descartar todos los mensajes cuyo puerto destino sea 80.
-    def setRule_1(self, event):
+    def set_rule_1(self, event):
         rule = of.ofp_flow_mod()
         rule.match.tp_dst = 80                              # Puerto destino 80
         rule.match.dl_type = pkt.ethernet.IP_TYPE           # Tipo IP (Es obligatorio?)
         rule.match.nw_proto = 17                           # Protocolo TCP (Es obligatorio?)
         event.connection.send(rule)
 
-    def setRule_2(self, event):
+    def set_rule_2(self, event):
         rule = of.ofp_flow_mod()
         rule.match.dl_type = pkt.ethernet.IP_TYPE           # Tipo de paquete: IP
         rule.match.nw_proto = pkt.ipv4.UDP_PROTOCOL         # Protocolo UDP (17 es el valor en decimal para UDP)
@@ -48,7 +48,7 @@ class Firewall(EventMixin):
         rule.match.tp_dst = 5001                            # Puerto destino 5001
         event.connection.send(rule)
 
-    def setRule_3(self, event, h1, h2):
+    def set_rule_3(self, event, h1, h2):
         rule = of.ofp_flow_mod()
         rule.match.dl_type = pkt.ethernet.IP_TYPE           # Tipo de paquete: IP
         rule.match.nw_src = IPAddr(h1)                      # Dirección IP del host 1
