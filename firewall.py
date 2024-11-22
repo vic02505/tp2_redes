@@ -25,18 +25,19 @@ class Firewall(EventMixin):
     def _handle_ConnectionUp(self, event):
         log.info("ConnectionUp for switch {}: ".format(event.dpid))
         # Si no ponemos ningun if, se instalarán las reglas en todos los switches
-        if event.dpid == 1:                                 # Se conecta al primer switch nada mas
-            log.info("Seteando reaglas")
+        if event.dpid == 2:                                 # Se conecta al primer switch nada mas
+            log.info("Seteando reglas")
             self.setRule_1(event)
             self.setRule_2(event)
-            self.setRule_3(event)
+            self.setRule_3(event, "10.0.0.1", "10.0.0.4")
         return            
 
+    # 1. Se deben descartar todos los mensajes cuyo puerto destino sea 80.
     def setRule_1(self, event):
         rule = of.ofp_flow_mod()
         rule.match.tp_dst = 80                              # Puerto destino 80
         rule.match.dl_type = pkt.ethernet.IP_TYPE           # Tipo IP (Es obligatorio?)
-        # rule.match.nw_proto = 6                           # Protocolo TCP (Es obligatorio?)
+        rule.match.nw_proto = 17                           # Protocolo TCP (Es obligatorio?)
         event.connection.send(rule)
 
     def setRule_2(self, event):
