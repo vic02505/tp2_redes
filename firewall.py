@@ -25,7 +25,7 @@ class Firewall(EventMixin):
     def _handle_ConnectionUp(self, event):
         log.info("ConnectionUp for switch {}: ".format(event.dpid))
         # Si no ponemos ningun if, se instalarán las reglas en todos los switches
-        if event.dpid == 2:                                 # Se conecta al primer switch nada mas
+        if event.dpid == 1 || event.dpid == 4:                                 # Se conecta al primer switch nada mas
             log.info("Seteando reglas")
             self.set_rule_1(event)
             self.set_rule_2(event)
