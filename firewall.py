@@ -37,21 +37,10 @@ class Firewall(EventMixin):
 
     # 1. Se deben descartar todos los mensajes cuyo puerto destino sea 80.
     def set_rule_1(self, event):
-        #Esta regla se setea tanto para TCP como para UDP!
-
-        # TCP
-        rule_tcp = of.ofp_flow_mod()
-        rule_tcp.match.tp_dst = self.rules_config[0]["tp_dst"]              # Puerto destino 80
-        rule_tcp.match.nw_proto = 6   #TCP
-        rule_tcp.match.dl_type = 0x0800 #IPv4
-        event.connection.send(rule_tcp)
-
-        # UDP
-        rule_udp = of.ofp_flow_mod()
-        rule_udp.match.tp_dst = self.rules_config[0]["tp_dst"]  # Puerto destino 80
-        rule_udp.match.nw_proto = 17  # UDP
-        rule_udp.match.dl_type = 0x0800  # IPv4
-        event.connection.send(rule_udp)
+        rule = of.ofp_flow_mod()
+        rule.match.dl_type = 0x0800
+        rule.match.tp_dst = self.rules_config[0]["tp_dst"]              # Puerto destino 8
+        event.connection.send(rule)
 
     # 2. Se deben descartar todos los mensajes que provengan del host 1, tengan como puerto destino el 5001, y estén utilizando el protocolo UDP.
     def set_rule_2(self, event):
