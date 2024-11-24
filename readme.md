@@ -59,39 +59,43 @@ los mismos son especificados al momento de levantar algún cliente o servidor so
     ```bash
     iperf -u -s -p <mi puerto>
     ```
-   -u indica que el protocolo de la capa de transporte es UDP.
-   -s indica que el host actuará como servidor.
-   -p indica el puerto en el que se levantará el servidor.
+   - -u indica que el protocolo de la capa de transporte es UDP.
+   - -s indica que el host actuará como servidor.
+   - -p indica el puerto en el que se levantará el servidor.
    (la IP en la que se levanta el servidor es la especificada por la tabla)
   
 - Para levantar un **cliente UDP** en un host (otra terminal de Xterm):
     ```bash
     iperf -u -c <IP del servidor> -p <puerto del servidor>
     ```
-   -u indica que el protocolo de la capa de transporte es UDP.
-   -c indica que el host actuará como cliente.
-   -p indica el puerto de destino al que se enviaran los mensajes.
+   - -u indica que el protocolo de la capa de transporte es UDP.
+   - -c indica que el host actuará como cliente.
+   - -p indica el puerto de destino al que se enviaran los mensajes.
 
-- Para levantar un *cliente TCP** en un host (una terminal de Xterm):
+- Para levantar un *cliente TCP* en un host (una terminal de Xterm):
     ```bash
     iperf -c <IP del servidor>  -p <puerto del servidor> -b <x> -n <x> -l <x> -t <x>
 
     ```
-   -c indica que el host actuará como cliente.
-   -p indica el puerto de destino al que se enviaran los mensajes..
-   -b Limitación del ancho de banda (bits/s).
-   -n Limitación de la cantidad de paquetes.
-   -l Limitación del tamaño de los paquetes.
-   -t Limitación del tiempo de ejecución (tiempo de conexión). 
+  
+   - -c indica que el host actuará como cliente.
+
+   - -p indica el puerto de destino al que se enviaran los mensajes.
+
+   - -b Limitación del ancho de banda (bits/s).
+
+   - -n Limitación de la cantidad de paquetes.
+   - -l Limitación del tamaño de los paquetes.
+   - -t Limitación del tiempo de ejecución (tiempo de conexión). 
 
 - Para levantar un **servidor TCP** en un host (otra terminal de Xterm):
     ```bash
     iperf -s -p <puerto> -b <x> -n <x> -l <x> -t <x>
     ```
-   -s indica que el host actuará como servidor.
-   -p indica el puerto en el que se levantará el servidor.
-   -b Limitación del ancho de banda (bits/s).
-   -n Limitación de la cantidad de paquetes.
-   -l Limitación del tamaño de los paquetes.
-   -t Limitación del tiempo de ejecución (tiempo de conexión). 
-   (la IP en la que se levanta el servidor es la especificada por la tabla)
+   - -s indica que el host actuará como servidor.
+   - -p indica el puerto en el que se levantará el servidor.
+   - -b Limitación del ancho de banda (bits/s).
+   - -n Limitación de la cantidad de paquetes.
+   - -l Limitación del tamaño de los paquetes.
+   - -t Limitación del tiempo de ejecución (tiempo de conexión). 
+   (la IP en la que se levanta el servidor es la especificada por la tabla).
