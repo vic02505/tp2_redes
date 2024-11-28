@@ -11,6 +11,9 @@
 
 # Descripción del proyecto
 
+Simulador de firewall en SDNs que usan el protocolo OpenFLow. El proyecto es un simulador simple sobre el 
+que se testean reglas de filtrado de mensajes para un firewall. Mediante el archivo config.json se pueden
+ajustar las reglas para estudiar distintos escenarios en la comunicación entre hosts.
 
 # Requisitos de uso
  
