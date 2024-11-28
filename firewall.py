@@ -13,17 +13,19 @@ class Firewall(EventMixin):
         log.debug("Enabling␣Firewall␣Module")
         with open("config.json", "r") as config_file:
             self.rules_config = json.load(config_file)["config"]["firewallRules"]
+            self.num_switch = json.load(config_file)["config"]["switches"]
+            self.firewallInSwitch = json.load(config_file)["config"]["firewallInSwitch"]
         config_file.close()
         
     def _handle_ConnectionUp(self, event):
         log.info("ConnectionUp for switch {}: ".format(event.dpid))
         # Si no ponemos ningun if, se instalarán las reglas en todos los switches
-        #if event.dpid == 1:                          # Se conecta al primer switch nada mas
-        log.info("Seteando reglas")
-        self.set_rule_1(event)
-        self.set_rule_2(event)
-        self.set_rule_3(event)
-
+        #if event.dpid == 1 or event.dpid == self.num_switch: 
+        if event.dpid == self.firewallInSwitch:                          # Se conecta al primer switch nada mas
+            log.info("Seteando reglas")
+            self.set_rule_1(event)
+            self.set_rule_2(event)
+            self.set_rule_3(event)
         return            
 
     # 1. Se deben descartar todos los mensajes cuyo puerto destino sea 80.
@@ -32,16 +34,16 @@ class Firewall(EventMixin):
 
         # TCP
         rule_tcp = of.ofp_flow_mod()
-        rule_tcp.match.tp_dst = self.rules_config[0]["tp_dst"]      # Puerto destino 80
-        rule_tcp.match.nw_proto = 6                                 #TCP
-        rule_tcp.match.dl_type = 0x0800                             #IPv4
+        rule_tcp.match.tp_dst = self.rules_config[0]["tp_dst"]          # Puerto destino 80
+        rule_tcp.match.nw_proto = 6                                     #TCP
+        rule_tcp.match.dl_type = 0x0800                                 #IPv4
         event.connection.send(rule_tcp)
 
         # UDP
         rule_udp = of.ofp_flow_mod()
-        rule_udp.match.tp_dst = self.rules_config[0]["tp_dst"]      # Puerto destino 80
-        rule_udp.match.nw_proto = 17                                # UDP
-        rule_udp.match.dl_type = 0x0800                             # IPv4
+        rule_udp.match.tp_dst = self.rules_config[0]["tp_dst"]          # Puerto destino 80
+        rule_udp.match.nw_proto = 17                                    # UDP
+        rule_udp.match.dl_type = 0x0800                                 # IPv4
         event.connection.send(rule_udp)
 
     # 2. Se deben descartar todos los mensajes que provengan del host 1, tengan como puerto destino el 5001, y estén utilizando el protocolo UDP.
