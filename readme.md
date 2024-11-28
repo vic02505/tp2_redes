@@ -1,7 +1,6 @@
-
 # TP2 - SDN OpenFlow
 
-| Integrante                   | Padrón | Mail                |
+| Integrantes                   | Padrón | Mail                |
 |------------------------------|--------|---------------------|
 | Tomás Ezequiel Galián        | 104354 | tgalian@fi.uba.ar   |
 | Edgardo Francisco Saez       | 104896 | esaez@fi.ubar.ar    |
