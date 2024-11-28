@@ -40,6 +40,7 @@ class Firewall(EventMixin):
         rule_tcp.match.nw_proto = 6                                     #TCP
         rule_tcp.match.dl_type = 0x0800                                 #IPv4
         event.connection.send(rule_tcp)
+        log.info("Rule 1 (TCP to port 80) applied.")
 
         # UDP
         rule_udp = of.ofp_flow_mod()
@@ -47,6 +48,7 @@ class Firewall(EventMixin):
         rule_udp.match.nw_proto = 17                                    # UDP
         rule_udp.match.dl_type = 0x0800                                 # IPv4
         event.connection.send(rule_udp)
+        log.info("Rule 1 (UDP to port 80) applied.")
 
     # 2. Se deben descartar todos los mensajes que provengan del host 1, tengan como puerto destino el 5001, y estén utilizando el protocolo UDP.
     def set_rule_2(self, event):
@@ -56,6 +58,7 @@ class Firewall(EventMixin):
         rule.match.tp_dst = self.rules_config[1]["tp_dst"]              # Puerto destino 5001
         rule.match.nw_proto = self.rules_config[1]["nw_proto"]          # Protocolo UDP (17 es el valor en decimal para UDP)
         event.connection.send(rule)
+        log.info(f"Rule 2 (UDP from {self.rules_config[1]['nw_src']} to port 5001) applied.")
 
     # 3. Se deben elegir dos hosts cualesquiera y los mismos no deben poder comunicarse de ninguna forma.
     def set_rule_3(self, event):
@@ -64,6 +67,8 @@ class Firewall(EventMixin):
         rule.match.nw_src = IPAddr(self.rules_config[2]["nw_src"])      # Dirección IP del host 1
         rule.match.nw_dst = IPAddr(self.rules_config[2]["nw_dst"])      # Dirección IP del host 2
         event.connection.send(rule)
+        log.info(
+            f"Rule 3 (No communication between {self.rules_config[2]['nw_src']} and {self.rules_config[2]['nw_dst']}) applied.")
 
     # Método para capturar y registrar paquetes
     def _handle_PacketIn(self, event):
