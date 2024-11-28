@@ -4,6 +4,7 @@ import pox.openflow.libopenflow_01 as of
 from pox.lib.revent import *
 from pox.lib.addresses import IPAddr
 import json
+import pox.lib.packet as pkt
 
 log = core.getLogger()
 
@@ -63,7 +64,27 @@ class Firewall(EventMixin):
         rule.match.nw_src = IPAddr(self.rules_config[2]["nw_src"])      # Dirección IP del host 1
         rule.match.nw_dst = IPAddr(self.rules_config[2]["nw_dst"])      # Dirección IP del host 2
         event.connection.send(rule)
-        
+
+    # Método para capturar y registrar paquetes
+    def _handle_PacketIn(self, event):
+        packet = event.parsed  # Paquete recibido
+        log.info(f"PacketIn: Switch {event.dpid}, Port {event.port}")
+
+        # Log básico de direcciones
+        if packet.type == pkt.ethernet.IP_TYPE:  # Solo IPv4
+            ip_packet = packet.payload  # Extraer la carga útil de IP
+            log.info(f"Source IP: {ip_packet.src}, Destination IP: {ip_packet.dst}")
+            log.info(f"Protocol: {ip_packet.protocol}")
+
+            # Si es TCP o UDP, registrar puertos
+            if ip_packet.protocol == pkt.ipv4.TCP_PROTOCOL:
+                tcp_packet = ip_packet.payload
+                log.info(f"TCP Packet: Src Port {tcp_packet.srcport}, Dst Port {tcp_packet.dstport}")
+            elif ip_packet.protocol == pkt.ipv4.UDP_PROTOCOL:
+                udp_packet = ip_packet.payload
+                log.info(f"UDP Packet: Src Port {udp_packet.srcport}, Dst Port {udp_packet.dstport}")
+        else:
+            log.info(f"Non-IP Packet: Type {packet.type}")
 
 def launch():
      # Starting the Firewall module
