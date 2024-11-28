@@ -12,16 +12,17 @@ class Firewall(EventMixin):
         self.listenTo(core.openflow)
         log.debug("Enabling␣Firewall␣Module")
         with open("config.json", "r") as config_file:
-            self.rules_config = json.load(config_file)["config"]["firewallRules"]
-            self.num_switch = json.load(config_file)["config"]["switches"]
-            self.firewallInSwitch = json.load(config_file)["config"]["firewallInSwitch"]
+            config = json.load(config_file)["config"]
+            self.rules_config = config["firewallRules"]
+            self.num_switch = config["switches"]
+            self.firewallInSwitch = config["firewallInSwitch"]
         config_file.close()
         
     def _handle_ConnectionUp(self, event):
         log.info("ConnectionUp for switch {}: ".format(event.dpid))
         # Si no ponemos ningun if, se instalarán las reglas en todos los switches
-        #if event.dpid == 1 or event.dpid == self.num_switch: 
-        if event.dpid == self.firewallInSwitch:                          # Se conecta al primer switch nada mas
+        if event.dpid == 1 or event.dpid == self.num_switch:
+        #if event.dpid == self.firewallInSwitch:                          # Se conecta al primer switch nada mas
             log.info("Seteando reglas")
             self.set_rule_1(event)
             self.set_rule_2(event)

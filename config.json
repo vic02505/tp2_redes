@@ -1,6 +1,6 @@
 {
     "config" : {
-        "switches" : 2,
+        "switches" : 1,
         "firewallInSwitch": 1,
         "firewallRules": [
         {
